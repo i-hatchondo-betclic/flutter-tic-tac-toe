@@ -1,0 +1,68 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Pages needs to mint a deployment token; nothing else writes to the repo.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deployment at a time, and let a newer push win rather than queueing.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.44.4
+          channel: stable
+          cache: true
+
+      - name: Resolve the workspace
+        run: flutter pub get
+
+      # The generated files are committed, but regenerating keeps a stale
+      # checkout from shipping code that no longer matches its sources.
+      - name: Generate
+        run: |
+          dart run build_runner build --delete-conflicting-outputs
+          cd ../presentation && dart run build_runner build --delete-conflicting-outputs
+        working-directory: packages/features/tic_tac_toe/domain
+
+      - name: Analyze
+        run: dart analyze --fatal-infos packages apps
+
+      - name: Test
+        run: |
+          flutter test
+          cd ../presentation && flutter test
+        working-directory: packages/features/tic_tac_toe/domain
+
+      # Project Pages are served from /<repo>/, so the build has to know its
+      # sub-path or every asset resolves against the domain root and 404s.
+      - name: Build
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+        working-directory: apps/iho_tictactoe
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/iho_tictactoe/build/web
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
