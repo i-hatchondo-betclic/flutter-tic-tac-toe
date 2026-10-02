@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tic_tac_toe_presentation/src/tic_tac_toe_screen.dart';
 import 'package:tic_tac_toe_presentation/src/widgets/game_board_view.dart';
+import 'package:tic_tac_toe_presentation/src/widgets/game_cell.dart';
+import 'package:tic_tac_toe_presentation/src/widgets/player_mark.dart';
 
 const _portrait = Size(402, 874);
 const _landscape = Size(874, 402);
@@ -58,6 +60,46 @@ void main() {
       final board = tester.getSize(find.byType(GameBoardView));
 
       expect(board.width, closeTo(board.height, 0.5));
+    });
+  });
+
+  group('playing', () {
+    testWidgets('tapping an empty square marks it and passes the turn', (tester) async {
+      await _pumpAt(tester, _portrait);
+      expect(find.byType(PlayerMark), findsNothing);
+      expect(find.text('X to play'), findsOneWidget);
+
+      await tester.tap(find.byType(GameCell).first);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PlayerMark), findsOneWidget);
+      expect(find.text('O to play'), findsOneWidget);
+    });
+
+    testWidgets('a square that is already taken does not move again', (tester) async {
+      await _pumpAt(tester, _portrait);
+      await tester.tap(find.byType(GameCell).first);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(GameCell).first);
+      await tester.pumpAndSettle();
+
+      expect(tester.takeException(), isNull);
+      expect(find.byType(PlayerMark), findsOneWidget);
+      expect(find.text('O to play'), findsOneWidget);
+    });
+
+    testWidgets('a new game clears the board once there is something to clear', (tester) async {
+      await _pumpAt(tester, _portrait);
+      expect(tester.widget<TextButton>(find.byType(TextButton)).onPressed, isNull);
+
+      await tester.tap(find.byType(GameCell).first);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('New game'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(PlayerMark), findsNothing);
+      expect(find.text('X to play'), findsOneWidget);
     });
   });
 }
