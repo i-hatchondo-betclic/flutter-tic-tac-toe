@@ -1,0 +1,9 @@
+#include "Generated.xcconfig"
+
+// Apple Silicon only ever needs the arm64 simulator slice, and on Xcode 27 keeping
+// x86_64 breaks the build outright: Flutter's framework script reads $ARCHS and calls
+// `lipo -verify_arch arm64 x86_64`, which Xcode 27's lipo rejects with "requires exactly
+// one input file" — surfaced misleadingly as "does not contain architectures".
+// EXCLUDED_ARCHS is not enough: Xcode still exports both in ARCHS.
+// Drop this once Flutter stops passing multiple archs to -verify_arch.
+ARCHS[sdk=iphonesimulator*] = arm64

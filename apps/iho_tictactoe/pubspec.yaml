@@ -1,0 +1,23 @@
+name: iho_tictactoe
+description: "Composition root — assembles the Tic Tac Toe feature layers and runs the app."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^3.2.1
+  tic_tac_toe_domain:
+  tic_tac_toe_presentation:
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.3.0
+
+flutter:
+  uses-material-design: true
