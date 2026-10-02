@@ -46,7 +46,10 @@ final class TicTacToeStateNotifier extends _$TicTacToeStateNotifier {
   }
 
   /// Abandons the current game and deals a fresh board.
-  void reset() => state = build();
+  // `invalidateSelf` rather than `state = build()`: build() calls ref.watch,
+  // which only belongs in the build phase. Letting the framework rebuild
+  // re-establishes the dependency on the mode instead of re-registering it.
+  void reset() => ref.invalidateSelf();
 
   void _applyMoveInternal(Position pos) {
     state = _moveInternal(state, pos);
