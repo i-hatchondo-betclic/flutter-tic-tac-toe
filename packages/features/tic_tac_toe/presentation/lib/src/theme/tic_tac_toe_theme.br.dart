@@ -15,7 +15,6 @@ abstract class TicTacToeTheme with _$TicTacToeTheme {
     required Color cell,
     required Color player1Mark,
     required Color player2Mark,
-    required Color winningLine,
     required TextStyle statusStyle,
   }) = _TicTacToeTheme;
 

@@ -14,7 +14,6 @@ TicTacToeTheme defaultTicTacToeTheme(Ref _) => const TicTacToeTheme(
   cell: Colors.white,
   player1Mark: Color(0xFF0F7B8A),
   player2Mark: Color(0xFFB03A5B),
-  winningLine: Color(0xFFE8B42A),
   statusStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
 );
 
