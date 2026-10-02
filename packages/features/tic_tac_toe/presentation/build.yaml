@@ -1,0 +1,20 @@
+# Only files suffixed `.br.dart` are scanned by the generators.
+# Same convention as betclic flutter-front: the suffix marks "this file needs codegen",
+# so build_runner never walks the whole package looking for annotations.
+targets:
+  $default:
+    builders:
+      freezed:
+        generate_for:
+          - "**/*.br.dart"
+      riverpod_generator:
+        generate_for:
+          - "**/*.br.dart"
+
+# riverpod_generator resolves types that freezed emits, but declares no ordering
+# against it. Without this, a clean build can see half-built classes and fail with
+# InvalidTypeException. flutter-front carries the same rule.
+global_options:
+  freezed:freezed:
+    runs_before:
+      - riverpod_generator:riverpod_generator
