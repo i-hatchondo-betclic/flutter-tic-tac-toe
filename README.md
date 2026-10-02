@@ -3,7 +3,7 @@
 A naive Tic Tac Toe, built to exercise our recent training on the **betclic `flutter-front`**
 architecture.
 
-**▶ [Play it in the browser](https://<your-github-user>.github.io/iho_tictactoe_app/)** — built and
+**▶ [Play it in the browser](https://i-hatchondo-betclic.github.io/flutter-tic-tac-toe/)** — built and
 published by `.github/workflows/deploy-web.yml` on every push to `main`.
 
 The point is not the game. The point is the wiring — and, this time, what happens when a feature
@@ -88,7 +88,7 @@ melos run generate              # build_runner across packages that need it
 melos run analyze
 melos run test
 cd apps/iho_tictactoe && flutter run
-cd apps/iho_tictactoe && flutter build web --release --base-href "/<repo>/"
+cd apps/iho_tictactoe && flutter build web --release --base-href "/flutter-tic-tac-toe/"
 ```
 
 ## Note on the pinned versions
