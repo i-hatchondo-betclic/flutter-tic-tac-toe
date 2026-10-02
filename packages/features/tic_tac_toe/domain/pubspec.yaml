@@ -1,0 +1,23 @@
+name: tic_tac_toe_domain
+description: Tic Tac Toe — domain layer. Entities, behaviors, game state. Pure Dart, depends on nothing.
+version: 0.0.1
+publish_to: "none"
+
+environment:
+  sdk: ">=3.11.0 <4.0.0"
+resolution: workspace
+
+# No `flutter` dependency on purpose: the rules of the game need no widgets.
+# AsyncNotifier/Notifier and @riverpod come from riverpod, not flutter_riverpod.
+dependencies:
+  fast_immutable_collections: ^11.0.4
+  freezed_annotation: ^3.1.0
+  riverpod: ^3.2.1
+  riverpod_annotation: ^4.0.2
+
+dev_dependencies:
+  build_runner: ^2.15.3
+  freezed: ^3.2.5
+  riverpod_generator: ^4.0.3
+  test: ^1.25.15
+  very_good_analysis: ^10.3.0
